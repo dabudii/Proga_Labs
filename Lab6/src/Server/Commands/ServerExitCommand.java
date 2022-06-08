@@ -1,6 +1,7 @@
 package Server.Commands;
 
 import General.Exceptions.WrongNumberOfElementsException;
+import Server.Utility.CollectionMain;
 import Server.Utility.ResponseOutputer;
 
 /**
@@ -8,8 +9,10 @@ import Server.Utility.ResponseOutputer;
  */
 public class ServerExitCommand extends MainCommand {
 
-    public ServerExitCommand() {
+    private CollectionMain collectionMain;
+    public ServerExitCommand(CollectionMain collectionMain) {
         super("server_exit","", "завершить работу сервера");
+        this.collectionMain = collectionMain;
     }
 
     /**
@@ -20,6 +23,7 @@ public class ServerExitCommand extends MainCommand {
     public boolean execute(String str, Object objArg) {
         try {
             if (!str.isEmpty()) throw new WrongNumberOfElementsException();
+            collectionMain.saveCollection();
             ResponseOutputer.appendln("Работа сервера успешно завершена!");
             return true;
         } catch (WrongNumberOfElementsException exception) {

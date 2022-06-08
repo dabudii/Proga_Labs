@@ -21,7 +21,6 @@ public class CommandManager {
     private Command updateCommand;
     private Command removeByIdCommand;
     private Command clearCommand;
-    private Command saveCommand;
     private Command executeScriptCommand;
     private Command exitCommand;
     private Command addIfMinCommand;
@@ -36,7 +35,7 @@ public class CommandManager {
     /**
      * Constructor of the class.
      */
-    public CommandManager(Command helpCommand, Command infoCommand, Command showCommand, Command addCommand, Command updateCommand, Command removeByIdCommand, Command clearCommand, Command saveCommand, Command executeScriptCommand, Command exitCommand, Command addIfMinCommand, Command removeLowerCommand, Command historyCommand, Command removeAllByDifficultyCommand, Command filterStartsWithNameCommand, Command printDescendingCommand, Command serverExitCommand){
+    public CommandManager(Command helpCommand, Command infoCommand, Command showCommand, Command addCommand, Command updateCommand, Command removeByIdCommand, Command clearCommand, Command executeScriptCommand, Command exitCommand, Command addIfMinCommand, Command removeLowerCommand, Command historyCommand, Command removeAllByDifficultyCommand, Command filterStartsWithNameCommand, Command printDescendingCommand, Command serverExitCommand){
         this.helpCommand = helpCommand;
         this.infoCommand = infoCommand;
         this.showCommand = showCommand;
@@ -44,7 +43,6 @@ public class CommandManager {
         this.updateCommand = updateCommand;
         this.removeByIdCommand = removeByIdCommand;
         this.clearCommand = clearCommand;
-        this.saveCommand = saveCommand;
         this.executeScriptCommand = executeScriptCommand;
         this.exitCommand = exitCommand;
         this.addIfMinCommand = addIfMinCommand;
@@ -62,7 +60,6 @@ public class CommandManager {
         commands.add(updateCommand);
         commands.add(removeByIdCommand);
         commands.add(clearCommand);
-        commands.add(saveCommand);
         commands.add(executeScriptCommand);
         commands.add(exitCommand);
         commands.add(addIfMinCommand);
@@ -170,14 +167,6 @@ public class CommandManager {
      */
     public boolean clear(String str,Object objArg){
         return clearCommand.execute(str,objArg);
-    }
-
-    /**
-     * @param str Its argument.
-     * @return Command exit status.
-     */
-    public boolean save(String str,Object objArg){
-        return saveCommand.execute(str,objArg);
     }
 
     /**

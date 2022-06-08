@@ -62,8 +62,8 @@ public class Start {
             Printer.println("Выводов до отключения: 3");
             Printer.println("Выводов до отключения: 2");
             Printer.println("Выводов до отключения: 1");
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
+        } catch (UnknownHostException exception) {
+            throw new RuntimeException(exception);
         }
     }
 }

@@ -89,7 +89,6 @@ public class Server {
         try {
             Printer.println("Прослушивание порта '" + port + "'...");
             Socket clientSocket = serverSocket.accept();
-
             Printer.println("Соединение с клиентом успешно установлено.");
             return clientSocket;
         } catch (SocketTimeoutException exception) {

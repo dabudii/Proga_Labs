@@ -1,6 +1,8 @@
 package Server.Commands;
 
+import General.Exceptions.CollectionEmptyException;
 import General.Exceptions.WrongNumberOfElementsException;
+import Server.Utility.CollectionMain;
 import Server.Utility.ResponseOutputer;
 
 /**
@@ -8,11 +10,13 @@ import Server.Utility.ResponseOutputer;
  */
 public class ExitCommand extends MainCommand {
 
+    private CollectionMain collectionMain;
     /**
      * Constructor of the class.
      */
-    public ExitCommand(){
+    public ExitCommand(CollectionMain collectionMain){
         super("exit"," ", "завершить программу(без сохранения в файл)");
+        this.collectionMain = collectionMain;
     }
 
     /**

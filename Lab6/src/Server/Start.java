@@ -8,6 +8,7 @@ import General.Utility.Printer;
 import Server.Commands.*;
 import Server.Utility.*;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Start {
@@ -38,20 +39,24 @@ public class Start {
                 new UpdateCommand(collectionMain),
                 new RemoveByIdCommand(collectionMain),
                 new ClearCommand(collectionMain),
-                new SaveCommand(collectionMain),
                 new ExecuteScriptCommand(),
-                new ExitCommand(),
+                new ExitCommand(collectionMain),
                 new AddIfMinCommand(collectionMain),
                 new RemoveLowerCommand(collectionMain),
                 new HistoryCommand(),
                 new RemoveAllByDifficultyCommand(collectionMain),
                 new FilterStartsWithNameCommand(collectionMain),
                 new PrintDescendingCommand(collectionMain),
-                new ServerExitCommand()
+                new ServerExitCommand(collectionMain)
         );
         RequestHandler requestHandler = new RequestHandler(commandManager);
         Server server = new Server(PORT, CONNECTION_TIMEOUT, requestHandler);
         server.run();
+        } catch (NoSuchElementException exception) {
+            Printer.printerror("Обрнаружен ввод CTRL+D! Срочное завершение программы...");
+            Printer.println("Выводов до отключения: 3");
+            Printer.println("Выводов до отключения: 2");
+            Printer.println("Выводов до отключения: 1");
         }
     }
 }
