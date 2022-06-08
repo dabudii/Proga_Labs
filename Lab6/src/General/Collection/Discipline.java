@@ -1,9 +1,11 @@
 package General.Collection;
 
+import java.io.Serializable;
+
 /**
  * Discipline - class that includes name of discipline and lecture hours.
  */
-public class Discipline {
+public class Discipline implements Serializable {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Integer lectureHours; //Поле может быть null
 

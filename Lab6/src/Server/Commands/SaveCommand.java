@@ -28,6 +28,7 @@ public class SaveCommand extends MainCommand {
                 throw new WrongNumberOfElementsException();
             }
             collectionMain.saveCollection();
+            ResponseOutputer.appendln("Сохранение прошло успешно!");
             return true;
         } catch (WrongNumberOfElementsException exception){
             ResponseOutputer.appendln("Использование: '"+getName()+" "+getUsage()+"'");

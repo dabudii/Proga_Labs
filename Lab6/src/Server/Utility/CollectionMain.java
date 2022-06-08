@@ -130,7 +130,6 @@ public class CollectionMain {
      */
     public void saveCollection(){
         String str = xmlParser.parseToXml(labcollection);
-        System.out.println(str);
         fileManager.writeCollection(str);
         lastSaveTime = LocalDateTime.now();
     }

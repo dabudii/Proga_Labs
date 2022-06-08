@@ -33,7 +33,7 @@ public class PrintDescendingCommand extends MainCommand {
                 throw new WrongNumberOfElementsException();
             }
             NavigableSet<LabWork> copyCollection = new TreeSet<>(collectionMain.getLabcollection());
-            for(LabWork lab : copyCollection.descendingSet()){
+            for(LabWork lab : copyCollection){
                 ResponseOutputer.appendln(lab.toString());
             }
             ResponseOutputer.appendln("Показ окончен!");

@@ -1,9 +1,11 @@
 package General.Collection;
 
+import java.io.Serializable;
+
 /**
  * Coordinates - the class that includes coordinates of the lab.
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     private int x; //Максимальное значение поля: 802
     private float y;
 

@@ -1,6 +1,7 @@
 package Server.Commands;
 
 import General.Exceptions.WrongNumberOfElementsException;
+import General.Utility.Printer;
 import Server.Utility.CollectionMain;
 import Server.Utility.ResponseOutputer;
 

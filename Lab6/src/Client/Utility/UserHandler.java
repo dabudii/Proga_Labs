@@ -116,9 +116,6 @@ public class UserHandler {
     private ProcessingCode processCommand(String command, String commandArgument) {
         try {
             switch (command) {
-                case "remove_all_by_difficulty":
-                    if (commandArgument.isEmpty()) throw new CommandUsageException("<difficulty>");
-                    break;
                 case "":
                     return ProcessingCode.ERROR;
                 case "help":
@@ -145,26 +142,29 @@ public class UserHandler {
                 case "save":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();
                     break;
-                case "execute_script":
-                    if (commandArgument.isEmpty()) throw new CommandUsageException("<file_name>");
-                    return ProcessingCode.SCRIPT;
                 case "exit":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();
                     break;
+                case "execute_script":
+                    if (commandArgument.isEmpty()) throw new CommandUsageException("<file_name>");
+                    return ProcessingCode.SCRIPT;
                 case "add_if_min":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException("{element}");
                     return ProcessingCode.OBJECT;
                 case "remove_lower":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException("{element}");
-                    return ProcessingCode.OBJECT;
+                    break;
                 case "history":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();
                     break;
-                case "print_descending":
-                    if (!commandArgument.isEmpty()) throw new CommandUsageException();
+                case "remove_all_by_difficulty":
+                    if (commandArgument.isEmpty()) throw new CommandUsageException("<difficulty>");
                     break;
                 case "filter_starts_with_name":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException("<name>");
+                    break;
+                case "print_descending":
+                    if (!commandArgument.isEmpty()) throw new CommandUsageException();
                     break;
                 case "server_exit":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();
@@ -201,7 +201,7 @@ public class UserHandler {
         Coordinates coordinates = mcPolite.ask("Хотите изменить координаты лабораторной?") ?
                 mcPolite.askCoordinates() : null;
         Float minimalPoint = mcPolite.ask("Хотите изменить минимальное количество баллов у лабораторной?") ?
-                mcPolite.askMinimalPoint() : 0;
+                mcPolite.askMinimalPoint() : -1;
         Difficulty difficulty = mcPolite.ask("Хотите изменить сложность у лабораторной?") ?
                 mcPolite.askDifficulty() : null;
         Discipline discipline = mcPolite.ask("Хотите изменить дисциплину у лабораторной?") ?
