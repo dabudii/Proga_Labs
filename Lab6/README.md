@@ -1,21 +1,21 @@
 # Лабораторная работа №6 Вариант: 541123
 Список задач:
-- [ ] Проверить работоспособность команд 
+- [x] Проверить работоспособность команд 
   - [x] help
   - [x] info
   - [x] show
-  - [ ] add - 
+  - [x] add 
   - [x] update id
   - [x] remove_by_id
   - [x] clear
   - [x] save
-  - [ ] execute_script
+  - [x] execute_script
   - [x] exit
-  - [ ] add_if_min - 
-  - [ ] remove_lower - 
+  - [x] add_if_min 
+  - [x] remove_lower  
   - [x] history
-  - [ ] remove_all_by_difficulty -  
-  - [ ] filter_starts_with_name -
+  - [x] remove_all_by_difficulty   
+  - [x] filter_starts_with_name 
   - [x] print_descending
   - [x] server_exit
 
