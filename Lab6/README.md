@@ -1,23 +1,23 @@
 # Лабораторная работа №6 Вариант: 541123
 Список задач:
 - [ ] Проверить работоспособность команд 
-  - [ ] help
-  - [ ] info
-  - [ ] show
-  - [ ] add
-  - [ ] update id
-  - [ ] remove_by_id
-  - [ ] clear
-  - [ ] save
+  - [x] help
+  - [x] info
+  - [x] show
+  - [ ] add - 
+  - [x] update id
+  - [x] remove_by_id
+  - [x] clear
+  - [x] save
   - [ ] execute_script
-  - [ ] exit
-  - [ ] add_if_min
-  - [ ] remove_lower
-  - [ ] history
-  - [ ] remove_all_by_difficulty
-  - [ ] filter_starts_with_name
-  - [ ] print_descending
-  - [ ] server_exit
+  - [x] exit
+  - [ ] add_if_min - 
+  - [ ] remove_lower - 
+  - [x] history
+  - [ ] remove_all_by_difficulty -  
+  - [ ] filter_starts_with_name -
+  - [x] print_descending
+  - [x] server_exit
 
 Разделить программу из лабораторной работы №5 на клиентский и серверный модули. Серверный модуль должен осуществлять выполнение команд по управлению коллекцией. Клиентский модуль должен в интерактивном режиме считывать команды, передавать их для выполнения на сервер и выводить результаты выполнения.
 
