@@ -9,7 +9,7 @@
   - [ ] remove_by_id
   - [ ] clear
   - [ ] save
-  - [ ] execute_script (время выполнения : 1-2 часа) (можно улучшить - при вводе неправильных данных перестает работать)
+  - [ ] execute_script
   - [ ] exit
   - [ ] add_if_min
   - [ ] remove_lower
