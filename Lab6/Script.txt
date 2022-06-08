@@ -1,0 +1,5 @@
+info
+show
+help
+execute_script Script1.txt
+exit
