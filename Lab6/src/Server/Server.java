@@ -7,7 +7,6 @@ import General.Interaction.Request;
 import General.Interaction.Response;
 import General.Interaction.ResponseCode;
 import General.Utility.Printer;
-import Server.Utility.CollectionMain;
 import Server.Utility.RequestHandler;
 
 import java.io.*;
@@ -120,7 +119,7 @@ public class Server {
                 }
 
                 if(requestFromConsole.equals("server_save")){
-                    Request request = new Request(requestFromConsole,"","");
+                    Request request = new Request(requestFromConsole,"");
                     request.setCommand(requestFromConsole);
                     requestHandler.handle(request);
                 }

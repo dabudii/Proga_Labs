@@ -41,11 +41,11 @@ public class RequestHandler {
             case "":
                 break;
             case "help":
-                if (!commandManager.help(commandStringArgument, commandObjectArgument))
+                if(!commandManager.help(commandStringArgument, commandObjectArgument))
                     return ResponseCode.ERROR;
                 break;
             case "info":
-                if (!commandManager.info(commandStringArgument, commandObjectArgument))
+                if(!commandManager.info(commandStringArgument, commandObjectArgument))
                     return ResponseCode.ERROR;
                 break;
             case "show":

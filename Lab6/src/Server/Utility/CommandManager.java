@@ -116,7 +116,9 @@ public class CommandManager {
     public boolean help(String str, Object objArg){
         if(helpCommand.execute(str,objArg)){
             for(Command command : commands){
-                ResponseOutputer.appendtable(command.getName()+" "+command.getUsage(),command.getDescription());
+                if(!command.getName().equals("server_save")){
+                    ResponseOutputer.appendtable(command.getName()+" "+command.getUsage(),command.getDescription());
+                }
             }
             return true;
         }
