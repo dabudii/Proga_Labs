@@ -29,13 +29,13 @@ public class CommandManager {
     private Command removeAllByDifficultyCommand;
     private Command filterStartsWithNameCommand;
     private Command printDescendingCommand;
-
+    private Command serverSaveCommand;
     private Command serverExitCommand;
 
     /**
      * Constructor of the class.
      */
-    public CommandManager(Command helpCommand, Command infoCommand, Command showCommand, Command addCommand, Command updateCommand, Command removeByIdCommand, Command clearCommand, Command executeScriptCommand, Command exitCommand, Command addIfMinCommand, Command removeLowerCommand, Command historyCommand, Command removeAllByDifficultyCommand, Command filterStartsWithNameCommand, Command printDescendingCommand, Command serverExitCommand){
+    public CommandManager(Command helpCommand, Command infoCommand, Command showCommand, Command addCommand, Command updateCommand, Command removeByIdCommand, Command clearCommand, Command executeScriptCommand, Command exitCommand, Command addIfMinCommand, Command removeLowerCommand, Command historyCommand, Command removeAllByDifficultyCommand, Command filterStartsWithNameCommand, Command printDescendingCommand, Command serverExitCommand, Command serverSaveCommand){
         this.helpCommand = helpCommand;
         this.infoCommand = infoCommand;
         this.showCommand = showCommand;
@@ -52,6 +52,7 @@ public class CommandManager {
         this.filterStartsWithNameCommand = filterStartsWithNameCommand;
         this.printDescendingCommand = printDescendingCommand;
         this.serverExitCommand = serverExitCommand;
+        this.serverSaveCommand = serverSaveCommand;
 
         commands.add(helpCommand);
         commands.add(infoCommand);
@@ -69,6 +70,7 @@ public class CommandManager {
         commands.add(filterStartsWithNameCommand);
         commands.add(printDescendingCommand);
         commands.add(serverExitCommand);
+        commands.add(serverSaveCommand);
     }
 
     /**
@@ -151,6 +153,14 @@ public class CommandManager {
      */
     public boolean update(String str,Object objArg){
         return updateCommand.execute(str,objArg);
+    }
+
+    /**
+     * @param str Its argument.
+     * @return Command exit status.
+     */
+    public boolean serverSave(String str,Object objArg){
+        return serverSaveCommand.execute(str,objArg);
     }
 
     /**

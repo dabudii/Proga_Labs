@@ -139,9 +139,6 @@ public class UserHandler {
                 case "clear":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();
                     break;
-                case "save":
-                    if (!commandArgument.isEmpty()) throw new CommandUsageException();
-                    break;
                 case "exit":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();
                     break;

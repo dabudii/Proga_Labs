@@ -4,6 +4,7 @@ package Server;
  * @version 1.0
  */
 
+import General.Interaction.Request;
 import General.Utility.Printer;
 import Server.Commands.*;
 import Server.Utility.*;
@@ -47,11 +48,15 @@ public class Start {
                 new RemoveAllByDifficultyCommand(collectionMain),
                 new FilterStartsWithNameCommand(collectionMain),
                 new PrintDescendingCommand(collectionMain),
-                new ServerExitCommand(collectionMain)
+                new ServerExitCommand(collectionMain),
+                new ServerSaveCommand(collectionMain)
         );
         RequestHandler requestHandler = new RequestHandler(commandManager);
         Server server = new Server(PORT, CONNECTION_TIMEOUT, requestHandler);
-        server.run();
+
+        //server.console(userScanner);
+        server.run(userScanner);
+
         } catch (NoSuchElementException exception) {
             Printer.printerror("Обрнаружен ввод CTRL+D! Срочное завершение программы...");
             Printer.println("Выводов до отключения: 3");

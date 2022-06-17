@@ -68,10 +68,6 @@ public class RequestHandler {
                 if (!commandManager.clear(commandStringArgument, commandObjectArgument))
                     return ResponseCode.ERROR;
                 break;
-            case "save":
-                if (!commandManager.save(commandStringArgument, commandObjectArgument))
-                    return ResponseCode.ERROR;
-                break;
             case "execute_script":
                 if (!commandManager.executeScript(commandStringArgument, commandObjectArgument))
                     return ResponseCode.ERROR;
@@ -94,6 +90,10 @@ public class RequestHandler {
                 break;
             case "remove_all_by_difficulty":
                 if (!commandManager.removeAllByDifficulty(commandStringArgument, commandObjectArgument))
+                    return ResponseCode.ERROR;
+                break;
+            case "server_save":
+                if(!commandManager.serverSave(commandStringArgument, commandObjectArgument))
                     return ResponseCode.ERROR;
                 break;
             case "filter_starts_with_name":

@@ -7,12 +7,14 @@ import General.Interaction.Request;
 import General.Interaction.Response;
 import General.Interaction.ResponseCode;
 import General.Utility.Printer;
+import Server.Utility.CollectionMain;
 import Server.Utility.RequestHandler;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Scanner;
 
 public class Server {
     private int port;
@@ -29,13 +31,13 @@ public class Server {
     /**
      * Begins server operation.
      */
-    public void run() {
+    public void run(Scanner userScanner) {
         try {
             openServerSocket();
             boolean processingStatus = true;
             while (processingStatus) {
                 try (Socket clientSocket = connectToClient()) {
-                    processingStatus = processClientRequest(clientSocket);
+                    processingStatus = processClientRequest(clientSocket, userScanner);
                 } catch (ConnectionErrorException | SocketTimeoutException exception) {
                     break;
                 } catch (IOException exception) {
@@ -103,12 +105,25 @@ public class Server {
     /**
      * The process of receiving a request from a client.
      */
-    private boolean processClientRequest(Socket clientSocket) {
+    private boolean processClientRequest(Socket clientSocket, Scanner userScanner) {
         Request userRequest = null;
         Response responseToUser = null;
         try (ObjectInputStream clientReader = new ObjectInputStream(clientSocket.getInputStream());
-             ObjectOutputStream clientWriter = new ObjectOutputStream(clientSocket.getOutputStream())) {
+             ObjectOutputStream clientWriter = new ObjectOutputStream(clientSocket.getOutputStream())){
             do {
+                Printer.println("Введите server_save, если хотите сохраниться или пустой ввод, если не хотите");
+                String requestFromConsole;
+                try{
+                    requestFromConsole = userScanner.nextLine();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+                if(requestFromConsole.equals("server_save")){
+                    Request request = new Request(requestFromConsole,"","");
+                    request.setCommand(requestFromConsole);
+                    requestHandler.handle(request);
+                }
                 userRequest = (Request) clientReader.readObject();
                 responseToUser = requestHandler.handle(userRequest);
                 Printer.println("Запрос '" + userRequest.getCommandName() + "' успешно обработан.");
@@ -128,5 +143,22 @@ public class Server {
             }
         }
         return true;
+    }
+
+    public void console(Scanner userScanner){
+        Printer.println("Введите save, если хотите сохраниться...");
+        String requestFromConsole;
+        try{
+            requestFromConsole = userScanner.nextLine();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if(requestFromConsole.equals("save")){
+            Request request = new Request(requestFromConsole,"","");
+            request.setCommand(requestFromConsole);
+            requestHandler.handle(request);
+        }
+
     }
 }

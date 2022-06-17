@@ -7,14 +7,14 @@ import Server.Utility.ResponseOutputer;
 /**
  * Command "save" saves collection to the current file.
  */
-public class SaveCommand extends MainCommand {
+public class ServerSaveCommand extends MainCommand {
     private CollectionMain collectionMain;
 
     /**
      * Constructor of the class.
      */
-    public SaveCommand(CollectionMain collectionMain){
-        super("save","", "сохранить коллекцию в файл");
+    public ServerSaveCommand(CollectionMain collectionMain){
+        super("server_save","", "сохранить коллекцию в файл");
         this.collectionMain = collectionMain;
     }
 

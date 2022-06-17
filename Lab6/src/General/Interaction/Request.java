@@ -31,6 +31,10 @@ public class Request implements Serializable {
         return commandName;
     }
 
+    public void setCommand(String str){
+        this.commandName = commandName;
+    }
+
     /**
      * @return Command string argument.
      */
