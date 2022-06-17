@@ -111,7 +111,7 @@ public class Server {
         try (ObjectInputStream clientReader = new ObjectInputStream(clientSocket.getInputStream());
              ObjectOutputStream clientWriter = new ObjectOutputStream(clientSocket.getOutputStream())){
             do {
-                Printer.println("Введите server_save, если хотите сохраниться или пустой ввод, если не хотите");
+                Printer.println("Введите server_save, если хотите сохраниться...");
                 String requestFromConsole;
                 try{
                     requestFromConsole = userScanner.nextLine();
@@ -124,6 +124,7 @@ public class Server {
                     request.setCommand(requestFromConsole);
                     requestHandler.handle(request);
                 }
+
                 userRequest = (Request) clientReader.readObject();
                 responseToUser = requestHandler.handle(userRequest);
                 Printer.println("Запрос '" + userRequest.getCommandName() + "' успешно обработан.");
