@@ -1,0 +1,33 @@
+<?xml version = "1.0"?>
+<treeset>
+	<lab>
+		<name>Pokemons1:beginning</name>
+		<coordinate_x>1</coordinate_x>
+		<coordinate_y>2.0</coordinate_y>
+		<creation_date>2022-04-07T20:58:32.637</creation_date>
+		<minimal_point>6.0</minimal_point>
+		<difficulty>EASY</difficulty>
+		<discipline_name>proga</discipline_name>
+		<lecture_hours>155</lecture_hours>
+	</lab>
+	<lab>
+		<name>Pokemons2:beginning</name>
+		<coordinate_x>2</coordinate_x>
+		<coordinate_y>3.0</coordinate_y>
+		<creation_date>2022-04-07T20:58:32.637</creation_date>
+		<minimal_point>6.0</minimal_point>
+		<difficulty>EASY</difficulty>
+		<discipline_name>proga</discipline_name>
+		<lecture_hours>165</lecture_hours>
+	</lab>
+	<lab>
+		<name>Pokemons3:final</name>
+		<coordinate_x>3</coordinate_x>
+		<coordinate_y>4.0</coordinate_y>
+		<creation_date>2022-04-07T20:59:24.088</creation_date>
+		<minimal_point>6.0</minimal_point>
+		<difficulty>INSANE</difficulty>
+		<discipline_name>proga</discipline_name>
+		<lecture_hours>175</lecture_hours>
+	</lab>
+</treeset>
