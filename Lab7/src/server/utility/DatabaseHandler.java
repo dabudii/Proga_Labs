@@ -1,5 +1,6 @@
 package server.utility;
 
+import general.exceptions.DatabaseHandlingException;
 import general.utility.Printer;
 
 import java.sql.*;
@@ -24,6 +25,7 @@ public class DatabaseHandler {
     public static final String USER_TABLE_ID_COLUMN = "id";
     public static final String USER_TABLE_USERNAME_COLUMN = "username";
     public static final String USER_TABLE_PASSWORD_COLUMN = "password";
+
     public static final String COORDINATES_TABLE_LABWORK_ID_COLUMN = "labwork_id";
     public static final String COORDINATES_TABLE_X_COLUMN = "x";
     public static final String COORDINATES_TABLE_Y_COLUMN = "y";
@@ -84,6 +86,10 @@ public class DatabaseHandler {
             }
             throw new SQLException(exception);
         }
+    }
+
+    public PreparedStatement getPreparedStatement(String sql) throws SQLException {
+        return getPreparedStatement(sql, false);
     }
 
     /**

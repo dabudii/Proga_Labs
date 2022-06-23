@@ -20,7 +20,7 @@ public class RequestHandler extends RecursiveTask<Response> {
     }
 
     public Response compute() {
-        Profile profile = new Profile(request.getProfile().getUsername(),request.getProfile().getPassword());
+        Profile profile = new Profile(request.getProfile().getUsername(),Hasher.hashPassword(request.getProfile().getPassword()));
         commandManager.addToHistory(request.getCommandName(), request.getProfile());
         ResponseCode responseCode = executeCommand(request.getCommandName(), request.getCommandStringArgument(),
                 request.getCommandObjectArgument(), profile);

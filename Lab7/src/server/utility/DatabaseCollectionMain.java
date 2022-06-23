@@ -75,8 +75,40 @@ public class DatabaseCollectionMain {
     public DatabaseCollectionMain(DatabaseHandler databaseHandler, DatabaseCommandManager databaseCommandManager) {
         this.databaseHandler = databaseHandler;
         this.databaseCommandManager = databaseCommandManager;
+        create();
     }
 
+    private void create(){
+        String create = "CREATE TABLE IF NOT EXISTS labwork (\n" +
+                "  id SERIAL PRIMARY KEY CHECK ( id > 0 ),\n" +
+                "  Name TEXT NOT NULL CHECK (name <> ''),\n" +
+                "  creation_date TEXT NOT NULL,\n" +
+                "  minimal_point FLOAt NOT NULL CHECK(minimal_point > 0),\n" +
+                "  difficulty TEXT NOT NULL,\n" +
+                "  discipline_id INT CHECK (discipline_id > 0),\n" +
+                "  user_id INT CHECK (user_id > 0)\n" +
+                "  );\n" +
+                " CREATE TABLE IF NOT EXISTS my_user (\n" +
+                "  id SERIAL PRIMARY KEY CHECK ( id > 0 ),\n" +
+                "  username TEXT NOT NULL CHECK (username <> ''),\n" +
+                "  password TExt NOT NULL\n" +
+                "  );\n" +
+                " CREATE TABLE IF NOT EXISTS coordinates (\n" +
+                "  labwork_id INT PRIMARY KEY CHECK (labwork_id > 0 ),\n" +
+                "  x int NOT NULL CHECK(x < 802),\n" +
+                "  y float NOT NULL\n" +
+                "  );\n" +
+                " CREATE TABLE IF NOT EXISTS discipline (\n" +
+                "  id SERIAL PRIMARY KEY CHECK ( id > 0 ),\n" +
+                "  name TEXT NOT NULL CHECK (name <> ''),\n" +
+                "  lecture_hours int NOT NULL\n" +
+                "  );";
+        try(PreparedStatement createStatement = databaseHandler.getPreparedStatement(create)) {
+            createStatement.execute();
+        } catch (SQLException e) {
+            Printer.printerror("Произошла ошибка при выполнении группы запросов на добавление таблиц!");
+        }
+    }
     private LabWork createLabwork(ResultSet resultSet) throws SQLException {
         long id = resultSet.getLong(DatabaseHandler.LABWORK_TABLE_ID_COLUMN);
         String name = resultSet.getString(DatabaseHandler.LABWORK_TABLE_NAME_COLUMN);
@@ -132,12 +164,14 @@ public class DatabaseCollectionMain {
 
             preparedInsertDisciplineStatement.setString(1, laba.getDiscipline().getName());
             preparedInsertDisciplineStatement.setLong(2, laba.getDiscipline().getLectureHours());
+
             if (preparedInsertDisciplineStatement.executeUpdate() == 0) throw new SQLException();
             ResultSet generatedDisciplineKeys = preparedInsertDisciplineStatement.getGeneratedKeys();
             long disciplineId;
             if (generatedDisciplineKeys.next()) {
                 disciplineId = generatedDisciplineKeys.getLong(1);
             } else throw new SQLException();
+            Printer.println("Выполнен запрос INSERT_DISCIPLINE!");
 
             preparedInsertLabworkStatement.setString(1, laba.getName());
             preparedInsertLabworkStatement.setTimestamp(2, Timestamp.valueOf(creationTime));
@@ -145,17 +179,21 @@ public class DatabaseCollectionMain {
             preparedInsertLabworkStatement.setString(4, laba.getDifficulty().toString());
             preparedInsertLabworkStatement.setLong(5, disciplineId);
             preparedInsertLabworkStatement.setLong(6, databaseCommandManager.getUserIdByUsername(profile));
-            if (preparedInsertLabworkStatement.executeUpdate() == 0) throw new SQLException();
+            if (preparedInsertLabworkStatement.executeUpdate() == 0) {
+                throw new SQLException();
+            }
             ResultSet generatedLabworkKeys = preparedInsertLabworkStatement.getGeneratedKeys();
             long labworkId;
             if (generatedLabworkKeys.next()) {
                 labworkId = generatedLabworkKeys.getLong(1);
             } else throw new SQLException();
+            Printer.println("Выполнен запрос INSERT_LABWORK!");
 
             preparedInsertCoordinatesStatement.setLong(1, labworkId);
-            preparedInsertCoordinatesStatement.setDouble(2, laba.getCoordinates().getX());
+            preparedInsertCoordinatesStatement.setInt(2, laba.getCoordinates().getX());
             preparedInsertCoordinatesStatement.setFloat(3, laba.getCoordinates().getY());
             if (preparedInsertCoordinatesStatement.executeUpdate() == 0) throw new SQLException();
+            Printer.println("Выполнен запрос INSERT_COORDINATES!");
 
             labWork = new LabWork(
                     labworkId,
@@ -229,14 +267,14 @@ public class DatabaseCollectionMain {
     }
 
     private long getDisciplineIdByLabworkId(long labworkId) throws SQLException {
-        long chapterId;
+        long disciplineId;
         PreparedStatement preparedSelectLabworkByIdStatement = null;
         try {
             preparedSelectLabworkByIdStatement = databaseHandler.getPreparedStatement(SELECT_LABWORK_BY_ID, false);
             preparedSelectLabworkByIdStatement.setLong(1, labworkId);
             ResultSet resultSet = preparedSelectLabworkByIdStatement.executeQuery();
             if (resultSet.next()) {
-                labworkId = resultSet.getLong(DatabaseHandler.LABWORK_TABLE_DISCIPLINE_ID_COLUMN);
+                disciplineId = resultSet.getLong(DatabaseHandler.LABWORK_TABLE_DISCIPLINE_ID_COLUMN);
             } else throw new SQLException();
         } catch (SQLException exception) {
             Printer.printerror("Произошла ошибка при выполнении запроса SELECT_LABWORK_BY_ID!");
@@ -244,7 +282,7 @@ public class DatabaseCollectionMain {
         } finally {
             databaseHandler.closePreparedStatement(preparedSelectLabworkByIdStatement);
         }
-        return labworkId;
+        return disciplineId;
     }
 
 

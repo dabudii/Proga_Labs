@@ -6,6 +6,8 @@ import general.exceptions.HistoryEmptyException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * The class that operates the commands.
@@ -33,7 +35,7 @@ public class CommandManager {
     private Command serverSaveCommand;
     private Command loginCommand;
     private Command registerCommand;
-
+    private ReadWriteLock locker = new ReentrantReadWriteLock();
     /**
      * Constructor of the class.
      */
@@ -97,6 +99,8 @@ public class CommandManager {
      * @param commandStore Command to add.
      */
     public void addToHistory(String commandStore, Profile profile){
+        locker.writeLock().lock();
+        try{
         for(Command command : commands){
             if(command.getName().split(" ")[0].equals(commandStore)){
                 for(int i=COMMAND_HISTORY_SIZE-1; i>0;i--){
@@ -105,14 +109,9 @@ public class CommandManager {
                 commandHistory[0] = commandStore;
             }
         }
-    }
-
-    /**
-     * @param command Command, which is not found.
-     * @return Command exit status.
-     */
-    public boolean noCommand(String command){
-        return false;
+        } finally {
+            locker.writeLock().unlock();
+        }
     }
 
     /**
@@ -120,6 +119,8 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean help(String str, Object objArg, Profile profile){
+        locker.readLock().lock();
+        try{
         if(helpCommand.execute(str,objArg, profile)){
             for(Command command : commands){
                 if(!command.getName().equals("server_save")){
@@ -129,6 +130,9 @@ public class CommandManager {
             return true;
         }
         else return false;
+        } finally {
+            locker.readLock().unlock();
+        }
     }
 
     /**
@@ -136,7 +140,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean info(String str, Object objArg, Profile profile){
-        return infoCommand.execute(str,objArg, profile);
+        locker.readLock().lock();
+        try {
+            return infoCommand.execute(str, objArg, profile);
+        } finally {
+            locker.readLock().unlock();
+        }
     }
 
     /**
@@ -144,7 +153,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean show(String str,Object objArg, Profile profile){
-        return showCommand.execute(str,objArg, profile);
+        locker.readLock().lock();
+        try {
+            return showCommand.execute(str, objArg, profile);
+        } finally {
+            locker.readLock().unlock();
+        }
     }
 
     /**
@@ -152,7 +166,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean add(String str,Object objArg, Profile profile){
-        return addCommand.execute(str,objArg, profile);
+        locker.writeLock().lock();
+        try {
+            return addCommand.execute(str, objArg, profile);
+        } finally {
+            locker.writeLock().unlock();
+        }
     }
 
     /**
@@ -160,15 +179,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean update(String str,Object objArg, Profile profile){
+        locker.writeLock().lock();
+        try {
         return updateCommand.execute(str,objArg, profile);
+    } finally {
+        locker.writeLock().unlock();
     }
-
-    /**
-     * @param str Its argument.
-     * @return Command exit status.
-     */
-    public boolean serverSave(String str,Object objArg, Profile profile){
-        return serverSaveCommand.execute(str,objArg, profile);
     }
 
     /**
@@ -176,7 +192,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean removeById(String str,Object objArg, Profile profile){
-        return removeByIdCommand.execute(str,objArg, profile);
+        locker.writeLock().lock();
+        try {
+            return removeByIdCommand.execute(str, objArg, profile);
+        } finally {
+            locker.writeLock().unlock();
+        }
     }
 
     /**
@@ -184,7 +205,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean clear(String str,Object objArg, Profile profile){
-        return clearCommand.execute(str,objArg, profile);
+        locker.writeLock().lock();
+        try {
+            return clearCommand.execute(str, objArg, profile);
+        } finally {
+            locker.writeLock().unlock();
+        }
     }
 
     /**
@@ -208,7 +234,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean addIfMin(String str,Object objArg, Profile profile){
-        return addIfMinCommand.execute(str,objArg, profile);
+        locker.writeLock().lock();
+        try {
+            return addIfMinCommand.execute(str, objArg, profile);
+        } finally {
+            locker.writeLock().unlock();
+        }
     }
 
     /**
@@ -216,7 +247,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean removeLower(String str,Object objArg, Profile profile){
-        return removeLowerCommand.execute(str,objArg, profile);
+        locker.writeLock().lock();
+        try {
+            return removeLowerCommand.execute(str, objArg, profile);
+        } finally {
+            locker.writeLock().unlock();
+        }
     }
 
     /**
@@ -224,23 +260,27 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean history(String str, Object objArg, Profile profile){
-        if(historyCommand.execute(str,objArg, profile)){
-            try{
-                if(commandHistory.length == 0) {
-                    throw new HistoryEmptyException();
-                }
-                for(String command : commandHistory)
-                {
-                    if(command!=null){
-                        ResponseOutputer.appendln(" " + command);
+        locker.readLock().lock();
+        try {
+            if (historyCommand.execute(str, objArg, profile)) {
+                try {
+                    if (commandHistory.length == 0) {
+                        throw new HistoryEmptyException();
                     }
+                    for (String command : commandHistory) {
+                        if (command != null) {
+                            ResponseOutputer.appendln(" " + command);
+                        }
+                    }
+                    return true;
+                } catch (HistoryEmptyException exception) {
+                    ResponseOutputer.appendln("Ни одна команда еще не использовалась!");
                 }
-                return true;
-            } catch (HistoryEmptyException exception){
-                ResponseOutputer.appendln("Ни одна команда еще не использовалась!");
             }
+            return false;
+        } finally {
+            locker.readLock().unlock();
         }
-        return false;
     }
 
     /**
@@ -248,7 +288,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean removeAllByDifficulty(String str,Object objArg, Profile profile){
-        return removeAllByDifficultyCommand.execute(str,objArg, profile);
+        locker.writeLock().lock();
+        try {
+            return removeAllByDifficultyCommand.execute(str, objArg, profile);
+        } finally {
+            locker.writeLock().unlock();
+        }
     }
 
     /**
@@ -256,7 +301,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean filterStartsWithName(String str,Object objArg, Profile profile){
-        return filterStartsWithNameCommand.execute(str,objArg, profile);
+        locker.readLock().lock();
+        try {
+            return filterStartsWithNameCommand.execute(str, objArg, profile);
+        } finally {
+            locker.readLock().unlock();
+        }
     }
 
     /**
@@ -264,7 +314,12 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean printDescending(String str,Object objArg, Profile profile){
-        return printDescendingCommand.execute(str,objArg, profile);
+        locker.readLock().lock();
+        try {
+            return printDescendingCommand.execute(str, objArg, profile);
+        } finally {
+            locker.readLock().unlock();
+        }
     }
 
     public boolean login(String stringArgument, Object objectArgument, Profile profile) {
