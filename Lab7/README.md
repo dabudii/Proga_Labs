@@ -14,7 +14,7 @@
   - [x] add_if_min 
   - [x] remove_lower  
   - [x] history
-  - [ ] remove_all_by_difficulty (написать реализацию в DatabaseCollectionMain)   
+  - [ ] remove_all_by_difficulty    
   - [ ] filter_starts_with_name (не считывает аргумент строки) 
   - [x] print_descending
   - [x] server_exit
