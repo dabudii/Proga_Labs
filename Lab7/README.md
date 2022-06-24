@@ -1,21 +1,21 @@
 # Лабораторная работа №7 Вариант: 53221
 Список задач:
+- [ ] Поправить генерацию id или создаются объекты, к которым нельзя обращаться
 - [x] Проверить работоспособность команд 
   - [x] help
   - [x] info
   - [x] show
-  - [ ] add (не выполняется INSERT_LABWORK)
-  - [x] update id
+  - [x] add 
+  - [ ] update id (крашится на запросе дисциплины)
   - [x] remove_by_id
   - [x] clear
-  - [x] save
   - [x] execute_script
   - [x] exit
   - [x] add_if_min 
   - [x] remove_lower  
   - [x] history
-  - [ ] remove_all_by_difficulty (написать реализацию в DatabaseCollectionMain)   
-  - [x] filter_starts_with_name 
+  - [x] remove_all_by_difficulty    
+  - [ ] filter_starts_with_name (не считывает аргумент строки) 
   - [x] print_descending
   - [x] server_exit
 
