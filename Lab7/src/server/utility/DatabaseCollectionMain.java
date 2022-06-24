@@ -307,7 +307,7 @@ public class DatabaseCollectionMain {
                 preparedUpdateLabworkNameByIdStatement.setLong(2, labworkId);
                 if (preparedUpdateLabworkNameByIdStatement.executeUpdate() == 0) throw new SQLException();
             }
-            if (laba.getMinimalPoint() != null) {
+            if (laba.getMinimalPoint() != 0) {
                 preparedUpdateLabworkMinimalPointByIdStatement.setFloat(1, laba.getMinimalPoint());
                 preparedUpdateLabworkMinimalPointByIdStatement.setLong(2, labworkId);
                 if (preparedUpdateLabworkMinimalPointByIdStatement.executeUpdate() == 0) throw new SQLException();
@@ -325,7 +325,7 @@ public class DatabaseCollectionMain {
             }
             if (laba.getDiscipline() != null) {
                 preparedUpdateDisciplineByIdStatement.setString(1, laba.getDiscipline().getName());
-                preparedUpdateDisciplineByIdStatement.setLong(2, laba.getDiscipline().getLectureHours());
+                preparedUpdateDisciplineByIdStatement.setInt(2, laba.getDiscipline().getLectureHours());
                 preparedUpdateDisciplineByIdStatement.setLong(3, getDisciplineIdByLabworkId(labworkId));
                 if (preparedUpdateDisciplineByIdStatement.executeUpdate() == 0) throw new SQLException();
             }
@@ -343,10 +343,6 @@ public class DatabaseCollectionMain {
             databaseHandler.closePreparedStatement(preparedUpdateDisciplineByIdStatement);
             databaseHandler.setNormalMode();
         }
-    }
-
-    public void removeAllByDifficulty(){
-
     }
 
     public void deleteLabworkById(long labworkId) throws DatabaseHandlingException {

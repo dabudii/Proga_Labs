@@ -25,6 +25,7 @@ public class FilterStartsWithNameCommand extends MainCommand {
      */
     public boolean execute(String str, Object objArg, Profile profile) {
         try{
+            System.out.println(str);
             if(str.isEmpty()){
                 throw new WrongNumberOfElementsException();
             }

@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.exceptions.DatabaseHandlingException;
 import general.exceptions.WrongNumberOfElementsException;
 import general.interaction.Profile;
 import server.utility.CollectionMain;
@@ -33,7 +34,6 @@ public class RemoveAllByDifficultyCommand extends MainCommand {
                 throw new WrongNumberOfElementsException();
             }
             collectionMain.removeAllByDifficulty(Difficulty.values()[Integer.parseInt(str)-1]);
-            databaseCollectionMain.removeAllByDifficulty();
             ResponseOutputer.appendln("Удаление произошло успешно! Поздравляем!");
             return true;
         } catch (ArrayIndexOutOfBoundsException exception){
@@ -46,6 +46,8 @@ public class RemoveAllByDifficultyCommand extends MainCommand {
             ResponseOutputer.appendln("Использование: '"+getName()+" "+getUsage()+"'");
         } catch (ClassCastException exception){
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
+        } catch (DatabaseHandlingException exception) {
+            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!");
         }
         return false;
     }

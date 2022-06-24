@@ -103,7 +103,14 @@ public class CollectionMain {
     /**
      * @param difficulty Difficluty of the lab.
      */
-    public void removeAllByDifficulty(Difficulty difficulty){
+    public void removeAllByDifficulty(Difficulty difficulty) throws DatabaseHandlingException {
+            for(LabWork lab : labcollection){
+                if(lab.getDifficulty().equals(difficulty)){
+                    databaseCollectionMain.deleteLabworkById(lab.getId());
+                    labcollection.remove(lab);
+                    break;
+                }
+            }
         labcollection.stream().filter(labWork -> labWork.getDifficulty().equals(difficulty)).findAny().ifPresent(this::removeFromCollection);
     }
 

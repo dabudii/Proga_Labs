@@ -79,7 +79,6 @@ public class UpdateCommand extends MainCommand {
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
         } catch (ManualDatabaseEditException exception) {
             ResponseOutputer.appenderror("Произошло прямое изменение базы данных!");
-            ResponseOutputer.appendln("Перезапустите клиент для избежания возможных ошибок.");
         } catch (DatabaseHandlingException exception) {
             ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!");
         }
