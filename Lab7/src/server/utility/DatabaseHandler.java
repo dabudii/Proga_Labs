@@ -82,7 +82,6 @@ public class DatabaseHandler {
         } catch (SQLException exception) {
             if (connection == null)
             {
-                Printer.printerror("ошибка здесь");
                 Printer.printerror("Соединение с базой данных не установлено!");
             }
             throw new SQLException(exception);

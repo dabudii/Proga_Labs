@@ -30,8 +30,7 @@ public class DatabaseCollectionMain {
             DatabaseHandler.LABWORK_TABLE_MINIMAL_POINT_COLUMN + ", " +
             DatabaseHandler.LABWORK_TABLE_DIFFICULTY_COLUMN + ", " +
             DatabaseHandler.LABWORK_TABLE_DISCIPLINE_ID_COLUMN + ", " +
-            DatabaseHandler.LABWORK_TABLE_USER_ID_COLUMN + ") VALUES (?, ?, ?, ?," +
-            "?::difficulty, ?)";
+            DatabaseHandler.LABWORK_TABLE_USER_ID_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?)";
     private final String DELETE_LABWORK_BY_ID = "DELETE FROM " + DatabaseHandler.LABWORK_TABLE +
             " WHERE " + DatabaseHandler.LABWORK_TABLE_ID_COLUMN + " = ?";
     private final String UPDATE_LABWORK_NAME_BY_ID = "UPDATE " + DatabaseHandler.LABWORK_TABLE + " SET " +
@@ -81,8 +80,8 @@ public class DatabaseCollectionMain {
     private void create(){
         String create = "CREATE TABLE IF NOT EXISTS labwork (\n" +
                 "  id SERIAL PRIMARY KEY CHECK ( id > 0 ),\n" +
-                "  Name TEXT NOT NULL CHECK (name <> ''),\n" +
-                "  creation_date TEXT NOT NULL,\n" +
+                "  name TEXT NOT NULL CHECK (name <> ''),\n" +
+                "  creation_date TIMESTAMP,\n" +
                 "  minimal_point FLOAt NOT NULL CHECK(minimal_point > 0),\n" +
                 "  difficulty TEXT NOT NULL,\n" +
                 "  discipline_id INT CHECK (discipline_id > 0),\n" +
@@ -95,8 +94,8 @@ public class DatabaseCollectionMain {
                 "  );\n" +
                 " CREATE TABLE IF NOT EXISTS coordinates (\n" +
                 "  labwork_id INT PRIMARY KEY CHECK (labwork_id > 0 ),\n" +
-                "  x int NOT NULL CHECK(x < 802),\n" +
-                "  y float NOT NULL\n" +
+                "  x INT NOT NULL CHECK(x < 802),\n" +
+                "  y FLOAT NOT NULL\n" +
                 "  );\n" +
                 " CREATE TABLE IF NOT EXISTS discipline (\n" +
                 "  id SERIAL PRIMARY KEY CHECK ( id > 0 ),\n" +
@@ -164,7 +163,6 @@ public class DatabaseCollectionMain {
 
             preparedInsertDisciplineStatement.setString(1, laba.getDiscipline().getName());
             preparedInsertDisciplineStatement.setLong(2, laba.getDiscipline().getLectureHours());
-
             if (preparedInsertDisciplineStatement.executeUpdate() == 0) throw new SQLException();
             ResultSet generatedDisciplineKeys = preparedInsertDisciplineStatement.getGeneratedKeys();
             long disciplineId;
@@ -172,14 +170,6 @@ public class DatabaseCollectionMain {
                 disciplineId = generatedDisciplineKeys.getLong(1);
             } else throw new SQLException();
             Printer.println("Выполнен запрос INSERT_DISCIPLINE!");
-            Printer.println(disciplineId);
-
-            Printer.println(laba.getName());
-            Printer.println(creationTime);
-            Printer.println(laba.getMinimalPoint());
-            Printer.println(laba.getDifficulty().toString());
-            Printer.println(disciplineId);
-            Printer.println(databaseCommandManager.getUserIdByUsername(profile));
 
             preparedInsertLabworkStatement.setString(1, laba.getName());
             preparedInsertLabworkStatement.setTimestamp(2, Timestamp.valueOf(creationTime));
@@ -200,7 +190,9 @@ public class DatabaseCollectionMain {
             preparedInsertCoordinatesStatement.setLong(1, labworkId);
             preparedInsertCoordinatesStatement.setInt(2, laba.getCoordinates().getX());
             preparedInsertCoordinatesStatement.setFloat(3, laba.getCoordinates().getY());
-            if (preparedInsertCoordinatesStatement.executeUpdate() == 0) throw new SQLException();
+            if (preparedInsertCoordinatesStatement.executeUpdate() == 0) {
+                throw new SQLException();
+            }
             Printer.println("Выполнен запрос INSERT_COORDINATES!");
 
             labWork = new LabWork(

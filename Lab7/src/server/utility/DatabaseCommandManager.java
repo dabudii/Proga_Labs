@@ -73,8 +73,7 @@ public class DatabaseCommandManager {
         long userId;
         PreparedStatement preparedSelectUserByUsernameStatement = null;
         try {
-            preparedSelectUserByUsernameStatement =
-                    databaseHandler.getPreparedStatement(SELECT_USER_BY_USERNAME, false);
+            preparedSelectUserByUsernameStatement = databaseHandler.getPreparedStatement(SELECT_USER_BY_USERNAME, false);
             preparedSelectUserByUsernameStatement.setString(1, profile.getUsername());
             ResultSet resultSet = preparedSelectUserByUsernameStatement.executeQuery();
             if (resultSet.next()) {
