@@ -6,7 +6,7 @@
   - [x] info
   - [x] show
   - [x] add 
-  - [ ] update id
+  - [ ] update id (крашится на запросе дисциплины)
   - [x] remove_by_id
   - [x] clear
   - [x] execute_script
