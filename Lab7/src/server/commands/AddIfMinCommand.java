@@ -21,9 +21,10 @@ public class AddIfMinCommand extends MainCommand {
     /**
      * Constructor of the class.
      */
-    public AddIfMinCommand(CollectionMain collectionMain){
+    public AddIfMinCommand(CollectionMain collectionMain, DatabaseCollectionMain databaseCollectionMain){
         super("add_if_min", "{element}", "добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции");
         this.collectionMain = collectionMain;
+        this.databaseCollectionMain = databaseCollectionMain;
     }
 
     /**

@@ -5,7 +5,8 @@ import general.exceptions.ConnectionErrorException;
 import general.exceptions.OpeningServerSocketException;
 import general.utility.Printer;
 import server.utility.CommandManager;
-import server.utility.ConnectionHandler;
+import server.utility.MyThread;
+import server.utility.MyThread;
 import server.utility.RequestHandler;
 
 import java.io.*;
@@ -22,7 +23,6 @@ public class Server {
     private ServerSocket serverSocket;
     private CommandManager commandManager;
     private RequestHandler requestHandler;
-    private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
     private Semaphore semaphore;
     private boolean processingStatus;
 
@@ -45,19 +45,17 @@ public class Server {
                         throw new ConnectionErrorException();
                     }
                     Socket clientSocket = connectToClient();
-                    cachedThreadPool.submit(new ConnectionHandler(this, clientSocket, commandManager));
+                    Thread thread = new Thread(new MyThread(this, clientSocket, commandManager));
+                    thread.start();
                 } catch (ConnectionErrorException exception) {
                     if (processingStatusReturn()) {
                         Printer.printerror("Произошла ошибка при соединении с клиентом!");
                     } else break;
                 }
             }
-            cachedThreadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             Printer.println("Работа сервера завершена.");
         } catch (OpeningServerSocketException exception) {
             Printer.printerror("Сервер не может быть запущен!");
-        } catch (InterruptedException exception){
-            Printer.printerror("Произошла ошибка при завершении работы с уже подключенными клиентами!");
         }
     }
 
@@ -90,7 +88,6 @@ public class Server {
         try {
             Printer.println("Завершение работы сервера...");
             if (serverSocket == null) throw new ClosingSocketException();
-            cachedThreadPool.shutdown();
             serverSocket.close();
             Printer.println("Работа сервера успешно завершена.");
         } catch (ClosingSocketException exception) {

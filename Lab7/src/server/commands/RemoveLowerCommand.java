@@ -19,9 +19,10 @@ public class RemoveLowerCommand extends MainCommand {
     /**
      * Constructor of the class.
      */
-    public RemoveLowerCommand(CollectionMain collectionMain){
+    public RemoveLowerCommand(CollectionMain collectionMain, DatabaseCollectionMain databaseCollectionMain){
         super("remove_lower","{element}", "удалить из коллекции все элементы, меньшие, чем заданный");
         this.collectionMain = collectionMain;
+        this.databaseCollectionMain = databaseCollectionMain;
     }
 
     /**

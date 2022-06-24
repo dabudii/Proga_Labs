@@ -20,9 +20,10 @@ public class UpdateCommand extends MainCommand {
     /**
      * Constructor of the class.
      */
-    public UpdateCommand(CollectionMain collectionMain){
+    public UpdateCommand(CollectionMain collectionMain,DatabaseCollectionMain databaseCollectionMain){
         super("update", "<ID>", "обновить значение элемента коллекции по ID");
         this.collectionMain = collectionMain;
+        this.databaseCollectionMain = databaseCollectionMain;
     }
 
     /**

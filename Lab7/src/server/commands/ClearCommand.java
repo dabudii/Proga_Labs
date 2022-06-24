@@ -1,8 +1,10 @@
 package server.commands;
 
+import general.exceptions.DatabaseHandlingException;
 import general.exceptions.WrongNumberOfElementsException;
 import general.interaction.Profile;
 import server.utility.CollectionMain;
+import server.utility.DatabaseCollectionMain;
 import server.utility.ResponseOutputer;
 
 /**
@@ -10,13 +12,15 @@ import server.utility.ResponseOutputer;
  */
 public class ClearCommand extends MainCommand {
     private CollectionMain collectionMain;
+    private DatabaseCollectionMain databaseCollectionMain;
 
     /**
      * Constructor of the class.
      */
-    public ClearCommand(CollectionMain collectionMain){
+    public ClearCommand(CollectionMain collectionMain, DatabaseCollectionMain databaseCollectionMain){
         super("clear", " ","очистить коллекцию");
         this.collectionMain = collectionMain;
+        this.databaseCollectionMain = databaseCollectionMain;
     }
 
     /**
@@ -29,12 +33,15 @@ public class ClearCommand extends MainCommand {
                 throw new WrongNumberOfElementsException();
             }
             collectionMain.clearCollection();
+            databaseCollectionMain.clearCollection();
             ResponseOutputer.appendln("Коллекция очищена!");
             return true;
         } catch (WrongNumberOfElementsException exception){
             ResponseOutputer.appendln("Использование: '"+getName()+" "+getUsage()+"'");
         } catch (ClassCastException exception){
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
+        } catch (DatabaseHandlingException exception) {
+            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!");
         }
         return true;
     }

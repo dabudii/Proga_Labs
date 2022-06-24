@@ -4,6 +4,7 @@ import general.exceptions.WrongNumberOfElementsException;
 import general.interaction.Profile;
 import server.utility.CollectionMain;
 import general.collection.Difficulty;
+import server.utility.DatabaseCollectionMain;
 import server.utility.ResponseOutputer;
 
 /**
@@ -11,13 +12,15 @@ import server.utility.ResponseOutputer;
  */
 public class RemoveAllByDifficultyCommand extends MainCommand {
     private CollectionMain collectionMain;
+    private DatabaseCollectionMain databaseCollectionMain;
 
     /**
      * Constructor of the class.
      */
-    public RemoveAllByDifficultyCommand(CollectionMain collectionMain){
+    public RemoveAllByDifficultyCommand(CollectionMain collectionMain, DatabaseCollectionMain databaseCollectionMain){
         super("remove_all_by_difficulty","<difficulty>", "удалить из коллекции все элементы, значение поля difficulty которого эквивалентно заданному");
         this.collectionMain = collectionMain;
+        this.databaseCollectionMain = databaseCollectionMain;
     }
 
     /**
@@ -30,6 +33,7 @@ public class RemoveAllByDifficultyCommand extends MainCommand {
                 throw new WrongNumberOfElementsException();
             }
             collectionMain.removeAllByDifficulty(Difficulty.values()[Integer.parseInt(str)-1]);
+            databaseCollectionMain.removeAllByDifficulty();
             ResponseOutputer.appendln("Удаление произошло успешно! Поздравляем!");
             return true;
         } catch (ArrayIndexOutOfBoundsException exception){

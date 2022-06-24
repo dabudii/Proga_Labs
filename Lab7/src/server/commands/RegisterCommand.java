@@ -26,9 +26,12 @@ public class RegisterCommand extends MainCommand {
     @Override
     public boolean execute(String stringArgument, Object objectArgument, Profile profile) {
         try {
-            if (!stringArgument.isEmpty() || objectArgument != null) throw new WrongNumberOfElementsException();
-            if (databaseCommandManager.insertUser(profile)) ResponseOutputer.appendln("Пользователь " +
-                    profile.getUsername() + " зарегистрирован.");
+            if (!stringArgument.isEmpty() || objectArgument != null) {
+                throw new WrongNumberOfElementsException();
+            }
+            if (databaseCommandManager.insertUser(profile)) {
+                ResponseOutputer.appendln("Пользователь " + profile.getUsername() + " зарегистрирован.");
+            }
             else throw new UserAlreadyExists();
             return true;
         } catch (WrongNumberOfElementsException exception) {

@@ -1,11 +1,13 @@
 package server.commands;
 
+import general.exceptions.DatabaseHandlingException;
 import general.exceptions.WrongNumberOfElementsException;
 import general.exceptions.CollectionEmptyException;
 import general.exceptions.LabNotFoundException;
 import general.interaction.Profile;
 import server.utility.CollectionMain;
 import general.collection.LabWork;
+import server.utility.DatabaseCollectionMain;
 import server.utility.ResponseOutputer;
 
 /**
@@ -13,13 +15,15 @@ import server.utility.ResponseOutputer;
  */
 public class RemoveByIdCommand extends MainCommand {
     private CollectionMain collectionMain;
+    private DatabaseCollectionMain databaseCollectionMain;
 
     /**
      * Constructor of the class.
      */
-    public RemoveByIdCommand(CollectionMain collectionMain){
+    public RemoveByIdCommand(CollectionMain collectionMain, DatabaseCollectionMain databaseCollectionMain){
         super("remove_by_id", "<id>", "удалить элемент из коллекции по id");
         this.collectionMain = collectionMain;
+        this.databaseCollectionMain = databaseCollectionMain;
     }
 
     /**
@@ -40,6 +44,7 @@ public class RemoveByIdCommand extends MainCommand {
                 throw new LabNotFoundException();
             }
             collectionMain.removeFromCollection(labRemove);
+            databaseCollectionMain.deleteLabworkById(id);
             ResponseOutputer.appendln("Лабораторная успешно удалена! Поздравляю!");
             return true;
         } catch (WrongNumberOfElementsException exception){
@@ -52,6 +57,8 @@ public class RemoveByIdCommand extends MainCommand {
             ResponseOutputer.appenderror("ID должен представляться числом!");
         } catch (ClassCastException exception){
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
+        } catch (DatabaseHandlingException e) {
+            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!");
         }
         return false;
     }

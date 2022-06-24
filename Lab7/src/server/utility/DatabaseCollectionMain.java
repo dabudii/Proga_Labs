@@ -91,7 +91,7 @@ public class DatabaseCollectionMain {
                 " CREATE TABLE IF NOT EXISTS my_user (\n" +
                 "  id SERIAL PRIMARY KEY CHECK ( id > 0 ),\n" +
                 "  username TEXT NOT NULL CHECK (username <> ''),\n" +
-                "  password TExt NOT NULL\n" +
+                "  password TEXT NOT NULL\n" +
                 "  );\n" +
                 " CREATE TABLE IF NOT EXISTS coordinates (\n" +
                 "  labwork_id INT PRIMARY KEY CHECK (labwork_id > 0 ),\n" +
@@ -103,7 +103,7 @@ public class DatabaseCollectionMain {
                 "  name TEXT NOT NULL CHECK (name <> ''),\n" +
                 "  lecture_hours int NOT NULL\n" +
                 "  );";
-        try(PreparedStatement createStatement = databaseHandler.getPreparedStatement(create)) {
+        try(PreparedStatement createStatement = databaseHandler.getPreparedStatement(create, false)) {
             createStatement.execute();
         } catch (SQLException e) {
             Printer.printerror("Произошла ошибка при выполнении группы запросов на добавление таблиц!");
@@ -172,6 +172,14 @@ public class DatabaseCollectionMain {
                 disciplineId = generatedDisciplineKeys.getLong(1);
             } else throw new SQLException();
             Printer.println("Выполнен запрос INSERT_DISCIPLINE!");
+            Printer.println(disciplineId);
+
+            Printer.println(laba.getName());
+            Printer.println(creationTime);
+            Printer.println(laba.getMinimalPoint());
+            Printer.println(laba.getDifficulty().toString());
+            Printer.println(disciplineId);
+            Printer.println(databaseCommandManager.getUserIdByUsername(profile));
 
             preparedInsertLabworkStatement.setString(1, laba.getName());
             preparedInsertLabworkStatement.setTimestamp(2, Timestamp.valueOf(creationTime));
@@ -343,6 +351,10 @@ public class DatabaseCollectionMain {
             databaseHandler.closePreparedStatement(preparedUpdateDisciplineByIdStatement);
             databaseHandler.setNormalMode();
         }
+    }
+
+    public void removeAllByDifficulty(){
+
     }
 
     public void deleteLabworkById(long labworkId) throws DatabaseHandlingException {

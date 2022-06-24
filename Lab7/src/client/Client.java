@@ -122,6 +122,7 @@ public class Client {
             }
         } while (responseServer == null || !responseServer.getResponseCode().equals(ResponseCode.OK));
         profile = requestToServer.getProfile();
+
     }
 
     /**

@@ -21,9 +21,10 @@ public class  AddCommand extends MainCommand {
     /**
      * Constructor of the class.
      */
-    public AddCommand(CollectionMain collectionMain){
+    public AddCommand(CollectionMain collectionMain, DatabaseCollectionMain databaseCollectionMain){
         super("add", "{element}", "добавить новый элемент в коллекцию");
         this.collectionMain = collectionMain;
+        this.databaseCollectionMain = databaseCollectionMain;
     }
 
     /**

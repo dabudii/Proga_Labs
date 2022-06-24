@@ -15,7 +15,7 @@ import java.util.concurrent.*;
 /**
  * Handles user connection.
  */
-public class ConnectionHandler implements Runnable {
+public class MyThread implements Runnable {
     private Server server;
     private Socket clientSocket;
     private CommandManager commandManager;
@@ -23,7 +23,7 @@ public class ConnectionHandler implements Runnable {
     private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
 
 
-    public ConnectionHandler(Server server, Socket clientSocket, CommandManager commandManager) {
+    public MyThread(Server server, Socket clientSocket, CommandManager commandManager) {
         this.server = server;
         this.clientSocket = clientSocket;
         this.commandManager = commandManager;
@@ -56,7 +56,9 @@ public class ConnectionHandler implements Runnable {
             } while (responseToUser.getResponseCode() != ResponseCode.SERVER_EXIT &&
                     responseToUser.getResponseCode() != ResponseCode.CLIENT_EXIT);
             if (responseToUser.getResponseCode() == ResponseCode.SERVER_EXIT)
+            {
                 stopFlag = true;
+            }
         } catch (ClassNotFoundException exception) {
             Printer.printerror("Произошла ошибка при чтении полученных данных!");
         } catch (CancellationException | ExecutionException | InterruptedException exception) {

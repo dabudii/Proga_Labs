@@ -12,7 +12,7 @@ public class Start {
     private static String databaseHost = "pg";
     private static String databasePassword = "hyp191";
     private static String databaseAddress;
-    public static final int PORT = 2023;
+    public static final int PORT = 2021;
     private static final int MAX_CLIENTS = 100;
 
     public static void main(String[] args) {
@@ -26,21 +26,21 @@ public class Start {
                     new HelpCommand(),
                     new InfoCommand(collectionMain),
                     new ShowCommand(collectionMain),
-                    new AddCommand(collectionMain),
-                    new UpdateCommand(collectionMain),
-                    new RemoveByIdCommand(collectionMain),
-                    new ClearCommand(collectionMain),
+                    new AddCommand(collectionMain, databaseCollectionMain),
+                    new UpdateCommand(collectionMain, databaseCollectionMain),
+                    new RemoveByIdCommand(collectionMain, databaseCollectionMain),
+                    new ClearCommand(collectionMain, databaseCollectionMain),
                     new ExecuteScriptCommand(),
                     new ExitCommand(collectionMain),
-                    new AddIfMinCommand(collectionMain),
-                    new RemoveLowerCommand(collectionMain),
+                    new AddIfMinCommand(collectionMain, databaseCollectionMain),
+                    new RemoveLowerCommand(collectionMain, databaseCollectionMain),
                     new HistoryCommand(),
-                    new RemoveAllByDifficultyCommand(collectionMain),
+                    new RemoveAllByDifficultyCommand(collectionMain, databaseCollectionMain),
                     new FilterStartsWithNameCommand(collectionMain),
                     new PrintDescendingCommand(collectionMain),
-                    new ServerExitCommand(collectionMain),
                     new LoginCommand(databaseCommandManager),
-                    new RegisterCommand(databaseCommandManager)
+                    new RegisterCommand(databaseCommandManager),
+                    new ServerExitCommand(collectionMain)
             );
 
             Server server = new Server(PORT,commandManager,MAX_CLIENTS);

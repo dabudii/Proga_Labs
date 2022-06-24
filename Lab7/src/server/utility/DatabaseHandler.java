@@ -82,14 +82,11 @@ public class DatabaseHandler {
         } catch (SQLException exception) {
             if (connection == null)
             {
+                Printer.printerror("ошибка здесь");
                 Printer.printerror("Соединение с базой данных не установлено!");
             }
             throw new SQLException(exception);
         }
-    }
-
-    public PreparedStatement getPreparedStatement(String sql) throws SQLException {
-        return getPreparedStatement(sql, false);
     }
 
     /**

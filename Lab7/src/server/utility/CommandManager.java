@@ -35,6 +35,7 @@ public class CommandManager {
     private Command serverSaveCommand;
     private Command loginCommand;
     private Command registerCommand;
+    private Command serverExitCommand;
     private ReadWriteLock locker = new ReentrantReadWriteLock();
     /**
      * Constructor of the class.
@@ -43,7 +44,7 @@ public class CommandManager {
                           Command updateCommand, Command removeByIdCommand, Command clearCommand, Command executeScriptCommand,
                           Command exitCommand, Command addIfMinCommand, Command removeLowerCommand, Command historyCommand,
                           Command removeAllByDifficultyCommand, Command filterStartsWithNameCommand,
-                          Command printDescendingCommand, Command serverSaveCommand, Command loginCommand, Command registerCommand){
+                          Command printDescendingCommand, Command loginCommand, Command registerCommand,Command serverExitCommand){
         this.helpCommand = helpCommand;
         this.infoCommand = infoCommand;
         this.showCommand = showCommand;
@@ -59,9 +60,9 @@ public class CommandManager {
         this.removeAllByDifficultyCommand = removeAllByDifficultyCommand;
         this.filterStartsWithNameCommand = filterStartsWithNameCommand;
         this.printDescendingCommand = printDescendingCommand;
-        this.serverSaveCommand = serverSaveCommand;
         this.loginCommand = loginCommand;
         this.registerCommand = registerCommand;
+        this.serverExitCommand = serverExitCommand;
 
         commands.add(helpCommand);
         commands.add(infoCommand);
@@ -78,7 +79,7 @@ public class CommandManager {
         commands.add(removeAllByDifficultyCommand);
         commands.add(filterStartsWithNameCommand);
         commands.add(printDescendingCommand);
-        commands.add(serverSaveCommand);
+        commands.add(serverExitCommand);
     }
 
     /**
@@ -328,5 +329,9 @@ public class CommandManager {
 
     public boolean register(String stringArgument, Object objectArgument, Profile profile) {
         return registerCommand.execute(stringArgument, objectArgument, profile);
+    }
+
+    public boolean serverExit(String stringArgument, Object objectArgument, Profile profile) {
+        return serverExitCommand.execute(stringArgument, objectArgument, profile);
     }
 }

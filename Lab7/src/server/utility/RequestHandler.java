@@ -92,10 +92,6 @@ public class RequestHandler extends RecursiveTask<Response> {
                 if (!commandManager.removeAllByDifficulty(commandStringArgument, commandObjectArgument, profile))
                     return ResponseCode.ERROR;
                 break;
-            case "server_save":
-                if(!commandManager.serverSave(commandStringArgument, commandObjectArgument, profile))
-                    return ResponseCode.ERROR;
-                break;
             case "filter_starts_with_name":
                 if (!commandManager.filterStartsWithName(commandStringArgument, commandObjectArgument, profile))
                     return ResponseCode.ERROR;
@@ -112,6 +108,10 @@ public class RequestHandler extends RecursiveTask<Response> {
                 if (!commandManager.register(commandStringArgument, commandObjectArgument, profile))
                     return ResponseCode.ERROR;
                 break;
+            case "server_exit":
+                if(!commandManager.serverExit(commandStringArgument, commandObjectArgument, profile))
+                    return ResponseCode.ERROR;
+                return ResponseCode.SERVER_EXIT;
             default:
                 ResponseOutputer.appendln("Команда '" + command + "' не найдена. Наберите 'help' для справки.");
                 return ResponseCode.ERROR;
