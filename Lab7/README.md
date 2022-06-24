@@ -4,7 +4,7 @@
   - [x] help
   - [x] info
   - [x] show
-  - [ ] add (DatabaseCollectionMain, 183)
+  - [ ] add (не выполняется INSERT_LABWORK)
   - [x] update id
   - [x] remove_by_id
   - [x] clear
