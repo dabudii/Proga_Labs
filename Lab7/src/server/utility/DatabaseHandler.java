@@ -1,6 +1,5 @@
 package server.utility;
 
-import general.exceptions.DatabaseHandlingException;
 import general.utility.Printer;
 
 import java.sql.*;

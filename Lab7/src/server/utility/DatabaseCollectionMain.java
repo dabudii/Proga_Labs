@@ -40,8 +40,9 @@ public class DatabaseCollectionMain {
             DatabaseHandler.LABWORK_TABLE_MINIMAL_POINT_COLUMN + " = ?" + " WHERE " +
             DatabaseHandler.LABWORK_TABLE_ID_COLUMN + " = ?";
     private final String UPDATE_LABWORK_DIFFICULTY_BY_ID = "UPDATE " + DatabaseHandler.LABWORK_TABLE + " SET " +
-            DatabaseHandler.LABWORK_TABLE_DIFFICULTY_COLUMN + " = ?::difficulty" + " WHERE " +
+            DatabaseHandler.LABWORK_TABLE_DIFFICULTY_COLUMN + " = ?" + " WHERE " +
             DatabaseHandler.LABWORK_TABLE_ID_COLUMN + " = ?";
+
     private final String SELECT_ALL_COORDINATES = "SELECT * FROM " + DatabaseHandler.COORDINATES_TABLE;
     private final String SELECT_COORDINATES_BY_LABWORK_ID = SELECT_ALL_COORDINATES +
             " WHERE " + DatabaseHandler.COORDINATES_TABLE_LABWORK_ID_COLUMN + " = ?";
@@ -54,6 +55,8 @@ public class DatabaseCollectionMain {
             DatabaseHandler.COORDINATES_TABLE_X_COLUMN + " = ?, " +
             DatabaseHandler.COORDINATES_TABLE_Y_COLUMN + " = ?" + " WHERE " +
             DatabaseHandler.COORDINATES_TABLE_LABWORK_ID_COLUMN + " = ?";
+    private final String DELETE_COORDINATES_BY_ID = "DELETE FROM " + DatabaseHandler.COORDINATES_TABLE +
+            " WHERE " + DatabaseHandler.COORDINATES_TABLE_LABWORK_ID_COLUMN + " = ?";
 
     private final String SELECT_ALL_DISCIPLINE = "SELECT * FROM " + DatabaseHandler.DISCIPLINE_TABLE;
     private final String SELECT_DISCIPLINE_BY_ID = SELECT_ALL_DISCIPLINE +
@@ -68,6 +71,7 @@ public class DatabaseCollectionMain {
             DatabaseHandler.DISCIPLINE_TABLE_ID_COLUMN + " = ?";
     private final String DELETE_DISCIPLINE_BY_ID = "DELETE FROM " + DatabaseHandler.DISCIPLINE_TABLE +
             " WHERE " + DatabaseHandler.DISCIPLINE_TABLE_ID_COLUMN + " = ?";
+
     private DatabaseHandler databaseHandler;
     private DatabaseCommandManager databaseCommandManager;
 
@@ -78,7 +82,8 @@ public class DatabaseCollectionMain {
     }
 
     private void create(){
-        String create = "CREATE TABLE IF NOT EXISTS labwork (\n" +
+        String create = "DROP TABLE discipline,coordinates,my_user,labwork \n"+
+                "CREATE TABLE IF NOT EXISTS labwork (\n" +
                 "  id SERIAL PRIMARY KEY CHECK ( id > 0 ),\n" +
                 "  name TEXT NOT NULL CHECK (name <> ''),\n" +
                 "  creation_date TIMESTAMP,\n" +
@@ -115,7 +120,7 @@ public class DatabaseCollectionMain {
         Coordinates coordinates = getCoordinatesByLabworkId(id);
         Float minimalPoint = resultSet.getFloat(DatabaseHandler.LABWORK_TABLE_MINIMAL_POINT_COLUMN);
         Difficulty difficulty = Difficulty.valueOf(resultSet.getString(DatabaseHandler.LABWORK_TABLE_DIFFICULTY_COLUMN));
-        Discipline discipline = getDisciplineByID(resultSet.getLong(DatabaseHandler.DISCIPLINE_TABLE_ID_COLUMN));
+        Discipline discipline = getDisciplineById(resultSet.getLong(DatabaseHandler.DISCIPLINE_TABLE_ID_COLUMN));
         Profile owner = databaseCommandManager.getUserById(resultSet.getLong(DatabaseHandler.LABWORK_TABLE_USER_ID_COLUMN));
         return new LabWork(
                 id,
@@ -224,8 +229,7 @@ public class DatabaseCollectionMain {
         Coordinates coordinates;
         PreparedStatement preparedSelectCoordinatesByLabworkIdStatement = null;
         try {
-            preparedSelectCoordinatesByLabworkIdStatement =
-                    databaseHandler.getPreparedStatement(SELECT_COORDINATES_BY_LABWORK_ID, false);
+            preparedSelectCoordinatesByLabworkIdStatement = databaseHandler.getPreparedStatement(SELECT_COORDINATES_BY_LABWORK_ID, false);
             preparedSelectCoordinatesByLabworkIdStatement.setLong(1, labworkId);
             ResultSet resultSet = preparedSelectCoordinatesByLabworkIdStatement.executeQuery();
             if (resultSet.next()) {
@@ -243,12 +247,11 @@ public class DatabaseCollectionMain {
         return coordinates;
     }
 
-    private Discipline getDisciplineByID(long disciplineId) throws SQLException {
+    private Discipline getDisciplineById(long disciplineId) throws SQLException {
         Discipline discipline;
         PreparedStatement preparedSelectDisciplineByIdStatement = null;
         try {
-            preparedSelectDisciplineByIdStatement =
-                    databaseHandler.getPreparedStatement(SELECT_DISCIPLINE_BY_ID, false);
+            preparedSelectDisciplineByIdStatement = databaseHandler.getPreparedStatement(SELECT_DISCIPLINE_BY_ID, false);
             preparedSelectDisciplineByIdStatement.setLong(1, disciplineId);
             ResultSet resultSet = preparedSelectDisciplineByIdStatement.executeQuery();
             if (resultSet.next()) {
@@ -258,7 +261,8 @@ public class DatabaseCollectionMain {
                 );
             } else throw new SQLException();
         } catch (SQLException exception) {
-            Printer.printerror("Произошла ошибка при выполнении запроса SELECT_CHAPTER_BY_ID!");
+            exception.printStackTrace();
+            Printer.printerror("Произошла ошибка при выполнении запроса SELECT_DISCIPLINE_BY_ID!");
             throw new SQLException(exception);
         } finally {
             databaseHandler.closePreparedStatement(preparedSelectDisciplineByIdStatement);
@@ -297,37 +301,42 @@ public class DatabaseCollectionMain {
             databaseHandler.setSavepoint();
 
             preparedUpdateLabworkNameByIdStatement = databaseHandler.getPreparedStatement(UPDATE_LABWORK_NAME_BY_ID, false);
+            preparedUpdateCoordinatesByLabworkIdStatement = databaseHandler.getPreparedStatement(UPDATE_COORDINATES_BY_LABWORK_ID, false);
             preparedUpdateLabworkMinimalPointByIdStatement = databaseHandler.getPreparedStatement(UPDATE_LABWORK_MINIMAL_POINT_BY_ID, false);
             preparedUpdateLabworkDifficultyByIdStatement = databaseHandler.getPreparedStatement(UPDATE_LABWORK_DIFFICULTY_BY_ID, false);
-            preparedUpdateCoordinatesByLabworkIdStatement = databaseHandler.getPreparedStatement(UPDATE_COORDINATES_BY_LABWORK_ID, false);
             preparedUpdateDisciplineByIdStatement = databaseHandler.getPreparedStatement(UPDATE_DISCIPLINE_BY_ID, false);
 
             if (laba.getName() != null) {
                 preparedUpdateLabworkNameByIdStatement.setString(1, laba.getName());
                 preparedUpdateLabworkNameByIdStatement.setLong(2, labworkId);
                 if (preparedUpdateLabworkNameByIdStatement.executeUpdate() == 0) throw new SQLException();
-            }
-            if (laba.getMinimalPoint() != 0) {
-                preparedUpdateLabworkMinimalPointByIdStatement.setFloat(1, laba.getMinimalPoint());
-                preparedUpdateLabworkMinimalPointByIdStatement.setLong(2, labworkId);
-                if (preparedUpdateLabworkMinimalPointByIdStatement.executeUpdate() == 0) throw new SQLException();
-            }
-            if (laba.getDifficulty() != null) {
-                preparedUpdateLabworkDifficultyByIdStatement.setString(1, laba.getDifficulty().toString());
-                preparedUpdateLabworkDifficultyByIdStatement.setLong(2, labworkId);
-                if (preparedUpdateLabworkDifficultyByIdStatement.executeUpdate() == 0) throw new SQLException();
+                Printer.println("Выполнен запрос UPDATE_LABWORK_NAME_BY_ID");
             }
             if (laba.getCoordinates() != null) {
                 preparedUpdateCoordinatesByLabworkIdStatement.setInt(1, laba.getCoordinates().getX());
                 preparedUpdateCoordinatesByLabworkIdStatement.setFloat(2, laba.getCoordinates().getY());
                 preparedUpdateCoordinatesByLabworkIdStatement.setLong(3, labworkId);
                 if (preparedUpdateCoordinatesByLabworkIdStatement.executeUpdate() == 0) throw new SQLException();
+                Printer.println("Выполнен запрос UPDATE_COORDINATES_BY_LABWORK_ID");
+            }
+            if (laba.getMinimalPoint() > 0) {
+                preparedUpdateLabworkMinimalPointByIdStatement.setFloat(1, laba.getMinimalPoint());
+                preparedUpdateLabworkMinimalPointByIdStatement.setLong(2, labworkId);
+                if (preparedUpdateLabworkMinimalPointByIdStatement.executeUpdate() == 0) throw new SQLException();
+                Printer.println("Выполнен запрос UPDATE_LABWORK_MINIMAL_POINT_BY_ID");
+            }
+            if (laba.getDifficulty() != null) {
+                preparedUpdateLabworkDifficultyByIdStatement.setString(1, laba.getDifficulty().toString());
+                preparedUpdateLabworkDifficultyByIdStatement.setLong(2, labworkId);
+                if (preparedUpdateLabworkDifficultyByIdStatement.executeUpdate() == 0) throw new SQLException();
+                Printer.println("Выполнен запрос UPDATE_LABWORK_DIFFICULTY_BY_ID");
             }
             if (laba.getDiscipline() != null) {
                 preparedUpdateDisciplineByIdStatement.setString(1, laba.getDiscipline().getName());
                 preparedUpdateDisciplineByIdStatement.setInt(2, laba.getDiscipline().getLectureHours());
                 preparedUpdateDisciplineByIdStatement.setLong(3, getDisciplineIdByLabworkId(labworkId));
                 if (preparedUpdateDisciplineByIdStatement.executeUpdate() == 0) throw new SQLException();
+                Printer.println("Выполнен запрос UPDATE_DISCIPLINE_BY_ID");
             }
 
             databaseHandler.commit();
@@ -347,23 +356,39 @@ public class DatabaseCollectionMain {
 
     public void deleteLabworkById(long labworkId) throws DatabaseHandlingException {
         PreparedStatement preparedDeleteLabworkByIdStatement = null;
+        PreparedStatement preparedDeleteCoordinatesByIdStatement = null;
+        PreparedStatement preparedDeleteDisciplineByIdStatement = null;
         try {
             preparedDeleteLabworkByIdStatement = databaseHandler.getPreparedStatement(DELETE_LABWORK_BY_ID, false);
+            preparedDeleteCoordinatesByIdStatement = databaseHandler.getPreparedStatement(DELETE_COORDINATES_BY_ID, false);
+            preparedDeleteDisciplineByIdStatement = databaseHandler.getPreparedStatement(DELETE_DISCIPLINE_BY_ID, false);
             preparedDeleteLabworkByIdStatement.setLong(1, labworkId);
-            if (preparedDeleteLabworkByIdStatement.executeUpdate() == 0) Printer.println(3);
+            if (preparedDeleteLabworkByIdStatement.executeUpdate() == 0) {
+                throw new SQLException();
+            }
+            preparedDeleteCoordinatesByIdStatement.setLong(1, labworkId);
+            if (preparedDeleteLabworkByIdStatement.executeUpdate() == 0) {
+                throw new SQLException();
+            }
+            preparedDeleteDisciplineByIdStatement.setLong(1, getDisciplineIdByLabworkId(labworkId));
+            if (preparedDeleteLabworkByIdStatement.executeUpdate() == 0) {
+                throw new SQLException();
+            }
         } catch (SQLException exception) {
             Printer.printerror("Произошла ошибка при выполнении запроса DELETE_LABWORK_BY_ID!");
             throw new DatabaseHandlingException();
         } finally {
             databaseHandler.closePreparedStatement(preparedDeleteLabworkByIdStatement);
+            databaseHandler.closePreparedStatement(preparedDeleteCoordinatesByIdStatement);
+            databaseHandler.closePreparedStatement(preparedDeleteDisciplineByIdStatement);
         }
     }
 
-    public boolean checkLabworkUserId(long labworkId, Profile profile) throws DatabaseHandlingException {
+    public boolean checkLabworkUserId(long oldlabworkId, Profile profile) throws DatabaseHandlingException {
         PreparedStatement preparedSelectLabworkByIdAndUserIdStatement = null;
         try {
             preparedSelectLabworkByIdAndUserIdStatement = databaseHandler.getPreparedStatement(SELECT_LABWORK_BY_ID_AND_USER_ID, false);
-            preparedSelectLabworkByIdAndUserIdStatement.setLong(1, labworkId);
+            preparedSelectLabworkByIdAndUserIdStatement.setLong(1, oldlabworkId);
             preparedSelectLabworkByIdAndUserIdStatement.setLong(2, databaseCommandManager.getUserIdByUsername(profile));
             ResultSet resultSet = preparedSelectLabworkByIdAndUserIdStatement.executeQuery();
             return resultSet.next();
@@ -376,8 +401,8 @@ public class DatabaseCollectionMain {
     }
 
     public void clearCollection() throws DatabaseHandlingException {
-        TreeSet<LabWork> labcCollection = getCollection();
-        for (LabWork lab : labcCollection) {
+        TreeSet<LabWork> labCollection = getCollection();
+        for (LabWork lab : labCollection) {
             deleteLabworkById(lab.getId());
         }
     }

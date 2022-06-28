@@ -146,11 +146,6 @@ public class CollectionMain {
         }
     }
 
-    /**
-     * Show the collection.
-     *
-     * @return
-     */
     public String showCollection(){
         return labcollection.stream().reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
     }

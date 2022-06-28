@@ -3,6 +3,7 @@ package server.commands;
 import general.exceptions.*;
 import general.interaction.Laba;
 import general.interaction.Profile;
+import general.utility.Printer;
 import server.utility.CollectionMain;
 import general.collection.*;
 import server.utility.DatabaseCollectionMain;
@@ -47,7 +48,6 @@ public class UpdateCommand extends MainCommand {
                 throw new LabNotFoundException();
             }
             Laba laba = (Laba) objArg;
-            databaseCollectionMain.updateLabworkById(id, laba);
 
             String name = laba.getName()==null ? oldLab.getName() : laba.getName();
             Coordinates coordinates = laba.getCoordinates()==null ? oldLab.getCoordinates() : laba.getCoordinates();
@@ -64,6 +64,8 @@ public class UpdateCommand extends MainCommand {
                     difficulty,
                     discipline,
                     profile));
+
+            databaseCollectionMain.updateLabworkById(id, laba);
 
             ResponseOutputer.appendln("Лаборатораня успешно изменена.");
             return true;

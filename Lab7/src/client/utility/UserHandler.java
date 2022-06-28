@@ -158,7 +158,7 @@ public class UserHandler {
                     if (commandArgument.isEmpty()) throw new CommandUsageException("<difficulty>");
                     break;
                 case "filter_starts_with_name":
-                    if (!commandArgument.isEmpty()) throw new CommandUsageException("<name>");
+                    if (commandArgument.isEmpty()) throw new CommandUsageException("<name>");
                     break;
                 case "print_descending":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();

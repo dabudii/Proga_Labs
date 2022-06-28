@@ -12,7 +12,7 @@ public class Start {
     private static String databaseHost = "pg";
     private static String databasePassword = "hyp191";
     private static String databaseAddress;
-    public static final int PORT = 2021;
+    public static final int PORT = 2019;
     private static final int MAX_CLIENTS = 100;
 
     public static void main(String[] args) {

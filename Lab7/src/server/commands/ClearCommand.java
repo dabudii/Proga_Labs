@@ -32,8 +32,8 @@ public class ClearCommand extends MainCommand {
             if(!str.isEmpty()){
                 throw new WrongNumberOfElementsException();
             }
-            collectionMain.clearCollection();
             databaseCollectionMain.clearCollection();
+            collectionMain.clearCollection();
             ResponseOutputer.appendln("Коллекция очищена!");
             return true;
         } catch (WrongNumberOfElementsException exception){
