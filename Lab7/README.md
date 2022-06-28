@@ -1,12 +1,13 @@
 # Лабораторная работа №7 Вариант: 53221
 Список задач:
-- [ ] Поправить генерацию id или создаются объекты, к которым нельзя обращаться
+- [ ] Поправить getCollection()
+- [ ] Возможно перерабоать thread
 - [x] Проверить работоспособность команд 
   - [x] help
   - [x] info
   - [x] show
   - [x] add 
-  - [ ] update id (крашится на запросе дисциплины)
+  - [X] update id (крашится на запросе дисциплины)
   - [x] remove_by_id
   - [x] clear
   - [x] execute_script
@@ -15,7 +16,7 @@
   - [x] remove_lower  
   - [x] history
   - [x] remove_all_by_difficulty    
-  - [ ] filter_starts_with_name (не считывает аргумент строки) 
+  - [x] filter_starts_with_name (не считывает аргумент строки) 
   - [x] print_descending
   - [x] server_exit
 
