@@ -38,11 +38,28 @@ public class RemoveLowerCommand extends MainCommand {
                 throw new CollectionEmptyException();
             }
             Laba laba = (Laba) objArg;
-            LabWork labCollection = collectionMain.getByValue(databaseCollectionMain.insertLab(laba, profile));
+            LabWork labToFind = new LabWork(
+                    laba.getName(), laba.getCoordinates(),
+                    LocalDateTime.now(),laba.getMinimalPoint(),laba.getDifficulty(),
+                    laba.getDiscipline(),profile);
+            LabWork labCollection = collectionMain.getByValue(labToFind);
             if(labCollection == null){
                 throw new LabNotFoundException();
             }
-            collectionMain.removeLower(labCollection);
+            for(LabWork lab : collectionMain.getLower(labToFind))
+            {
+                if(!lab.getOwner().equals(profile)){
+                    throw new PermissionDeniedException();
+                }
+                if(!databaseCollectionMain.checkLabworkUserId(lab.getId(),profile)){
+                    throw new DatabaseHandlingException();
+                }
+            }
+            for(LabWork lab : collectionMain.getLower(labToFind))
+            {
+                databaseCollectionMain.deleteLabworkById(lab.getId());
+                collectionMain.removeFromCollection(lab);
+            }
             ResponseOutputer.appendln("Лабораторные успешно удалены! Поздравляем!");
             return true;
         } catch (WrongNumberOfElementsException exception){
@@ -55,6 +72,8 @@ public class RemoveLowerCommand extends MainCommand {
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
         } catch (DatabaseHandlingException exception) {
             ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!");
+        } catch (PermissionDeniedException exception) {
+            ResponseOutputer.appenderror("Недостаточно прав для выполнения данной команды!");
         }
         return false;
     }

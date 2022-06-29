@@ -21,7 +21,7 @@ public class Start {
     private static final int MAX_RECONNECTION_ATTEMPTS = 5;
 
     private static String host;
-    private static int port = 2019;
+    private static int port = 2003;
 
     private static boolean initializeConnectionAddress(String name, int numPort) {
         try {

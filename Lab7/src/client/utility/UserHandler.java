@@ -150,7 +150,7 @@ public class UserHandler {
                     return ProcessingCode.OBJECT;
                 case "remove_lower":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException("{element}");
-                    break;
+                    return ProcessingCode.OBJECT;
                 case "history":
                     if (!commandArgument.isEmpty()) throw new CommandUsageException();
                     break;

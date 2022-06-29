@@ -121,16 +121,6 @@ public class CollectionMain {
         labcollection.clear();
     }
 
-    /**
-     * @return Next ID.
-     */
-    public long generateNextId(){
-        if(labcollection.isEmpty()){
-            return 1;
-        }
-        else return  labcollection.last().getId()+1;
-    }
-
 
     /**
      * Load the collection.
@@ -146,6 +136,9 @@ public class CollectionMain {
         }
     }
 
+    public TreeSet<LabWork> getLower(LabWork labToFind){
+        return labcollection.stream().filter(lab -> lab.compareTo(labToFind)<0).collect(TreeSet::new, TreeSet::add, TreeSet::addAll);
+    }
     public String showCollection(){
         return labcollection.stream().reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
     }
